@@ -39,31 +39,34 @@ class Xuly extends Thread{
 	@Override
 	public void run() {
 		try {
-			DataInputStream dis = new DataInputStream(soc.getInputStream());
-			DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-			dos.writeUTF("Hi Client, please send name file\n");
-			String nameFile = dis.readUTF();
-			dos.writeUTF("I will send to you file " + nameFile + "\n");
-			
-			String filePath = "filePath\\" + nameFile;
-			File file = new File(filePath);
-			FileInputStream fileIn = new FileInputStream(file);
-			
-			dos.writeLong(file.length());
-			
-			byte[] buffer = new byte[1024*4];
-			int bytesRead;
-			
-			while((bytesRead = fileIn.read(buffer)) != -1) {
-				dos.write(buffer, 0, bytesRead);;
+			while(true) {
+				DataInputStream dis = new DataInputStream(soc.getInputStream());
+				DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+				dos.writeUTF("Hi Client, please send name file");
+				String nameFile = dis.readUTF();
+				dos.writeUTF("I will send to you file " + nameFile + "\n");
+				
+				String filePath = "filePath\\" + nameFile;
+				File file = new File(filePath);
+				FileInputStream fileIn = new FileInputStream(file);
+				
+				dos.writeLong(file.length());
+				
+				byte[] buffer = new byte[1024*4];
+				int bytesRead;
+				
+				while((bytesRead = fileIn.read(buffer)) != -1) {
+					dos.write(buffer, 0, bytesRead);;
+				}
+				
+				fileIn.close();
+				dos.flush();
+				System.out.println("file is send to client");				
 			}
-			
-			fileIn.close();
-			dos.flush();
-			System.out.println("file is send to client");
-			
 		} catch (IOException e) {
 			System.out.println("Không lấy được luồng dữ liệu từ socket " + e.getMessage());;
 		}
 	}
 }
+
+//tách lớp send và receivd 
