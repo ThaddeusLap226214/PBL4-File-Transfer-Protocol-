@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.JFrame;
+
 public class Client_test implements Runnable{
 	Socket soc;
 	

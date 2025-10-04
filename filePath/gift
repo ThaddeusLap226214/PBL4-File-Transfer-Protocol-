@@ -1,6 +1,14 @@
-Raumadauxanhdavang
-Cucachuamautimotxanhoitim
-xacsuocucarotanthitkhoailangtimnhungkhongnuottroicuctucnay
-vatudocuocdoicothemmotthangmapbungbiabietbudaydienmakhongchetchibattinh.
-itadakimaumei___
-End.
+hàm sendFile cần tên file cần gửi
+
+hàm reiceveFile cần tên file cần gửi và tên file sẽ ghi ra
+
+trong cả hai chiều thì tên file và tên file sẽ ghi ra đều do client nhập.
+chiều 1 server to client
+	1 client gửi tên file và server nhận
+	2 server gửi lại độ lớn file và client nhận
+	3 sau đó server gửi tiếp file và client nhận ghi vào reiceve
+	phần nằm trong hàm reiceve là 1,2,3
+chiều 2 client to server
+	1 client gửi tên reiceve cho server và server nhận
+	2 client gửi độ lớn file cho server và server nhận
+	3 sau đó client gửi tiếp file và server nhận ghi vào reiceve
