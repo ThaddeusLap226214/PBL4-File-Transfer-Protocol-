@@ -27,28 +27,34 @@ public class ClientGUI extends JFrame{
 	private JTextField txtFUser;
 	private JTextField txtFPass;
 	private JTextField txtFPort;
-	private JTextField textField;
+	private JTextField txtFLocalPath;
 	private JTextField textField_1;
 	public ClientGUI() {
+		//những dòng setLayout GridLayout(1,0) là sẽ đặt 1 loại panel (JSplitPane) phủ toàn bộ frame đang setLayout
 		getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setDividerSize(3);
-		splitPane.setResizeWeight(0.5);
-		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		getContentPane().add(splitPane);
+		//JSplitPane Chia Frame thành 2 phần theo tỉ lệ ban đầu và có thể thay đổi tùy ý
+		//Phần Login và CMD ở trên, Thư mục của máy chủ và khách ở dưới
+		//DividerSize là độ rộng viền, ResizeWeight là sự thay đổi 2 phần khi phóng thu cửa sổ
+		JSplitPane splitPaneChia2GiaoDien = new JSplitPane();
+		splitPaneChia2GiaoDien.setDividerSize(3);
+		splitPaneChia2GiaoDien.setResizeWeight(0.5);
+		splitPaneChia2GiaoDien.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		getContentPane().add(splitPaneChia2GiaoDien);
 		
 		JPanel panelLoginAndCMD = new JPanel();
-		splitPane.setLeftComponent(panelLoginAndCMD);
+		splitPaneChia2GiaoDien.setLeftComponent(panelLoginAndCMD);
 		panelLoginAndCMD.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane_1 = new JSplitPane();
-		splitPane_1.setResizeWeight(0.2);
-		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panelLoginAndCMD.add(splitPane_1);
+		//Phần Login và CMD chia làm 2 phần tiếp Login và CMD (2 panel)
+		JSplitPane splitPaneChiaLoginVaCMD = new JSplitPane();
+		splitPaneChiaLoginVaCMD.setResizeWeight(0.2);
+		splitPaneChiaLoginVaCMD.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panelLoginAndCMD.add(splitPaneChiaLoginVaCMD);
 		
+		//Panel Login và các thành phần
 		JPanel panelLogin = new JPanel();
-		splitPane_1.setLeftComponent(panelLogin);
+		splitPaneChiaLoginVaCMD.setLeftComponent(panelLogin);
 		panelLogin.setLayout(null);
 		
 		JLabel lbHost = new JLabel("Host:");
@@ -98,8 +104,9 @@ public class ClientGUI extends JFrame{
 		butConnect.setBounds(670, 21, 96, 21);
 		panelLogin.add(butConnect);
 		
+		//Panel CMD, Bọc bằng Jscroll Pane để cuộn và JTextArea
 		JPanel panelCMD = new JPanel();
-		splitPane_1.setRightComponent(panelCMD);
+		splitPaneChiaLoginVaCMD.setRightComponent(panelCMD);
 		panelCMD.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JScrollPane scrollPaneCMD = new JScrollPane();
@@ -112,130 +119,144 @@ public class ClientGUI extends JFrame{
 		JTextArea textArea = new JTextArea();
 		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		panelCMDdirect.add(textArea);
-		splitPane_1.setDividerLocation(0.2);
+		splitPaneChiaLoginVaCMD.setDividerLocation(0.2);
 		
-		JPanel panelFolderTree = new JPanel();
-		splitPane.setRightComponent(panelFolderTree);
-		panelFolderTree.setLayout(new GridLayout(1, 0, 0, 0));
+		//Quay lại với toàn Frame lúc đầu Login và CMD ở trên còn 
+		//PHẦN DƯỚI LÀ HIỂN THỊ THƯ MỤC MÁY CHỦ VÀ MÁY KHÁCH
+		JPanel panelFolderTreeLocalAndRemote = new JPanel();
+		splitPaneChia2GiaoDien.setRightComponent(panelFolderTreeLocalAndRemote);
+		panelFolderTreeLocalAndRemote.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane_2 = new JSplitPane();
-		splitPane_2.setDividerSize(2);
-		splitPane_2.setResizeWeight(0.5);
-		panelFolderTree.add(splitPane_2);
+		//Chia phần dưới làm trái cho local và phải cho Remote
+		JSplitPane splitPaneChiaLocalVaRemoteFolder = new JSplitPane();
+		splitPaneChiaLocalVaRemoteFolder.setDividerSize(2);
+		splitPaneChiaLocalVaRemoteFolder.setResizeWeight(0.5);
+		panelFolderTreeLocalAndRemote.add(splitPaneChiaLocalVaRemoteFolder);
 		
+		//Phần trái: Local Site (Path and Tree Folder)
 		JPanel panelLocalFolder = new JPanel();
-		splitPane_2.setLeftComponent(panelLocalFolder);
+		splitPaneChiaLocalVaRemoteFolder.setLeftComponent(panelLocalFolder);
 		panelLocalFolder.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane_3 = new JSplitPane();
-		splitPane_3.setDividerSize(2);
-		splitPane_3.setResizeWeight(0.5);
-		splitPane_3.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panelLocalFolder.add(splitPane_3);
+		//Chia phần trái thành trên để hiện thư mục còn phần dưới để sau phát triển thêm
+		JSplitPane splitPaneChiaLocalFolderTrenVaDuoi = new JSplitPane();
+		splitPaneChiaLocalFolderTrenVaDuoi.setDividerSize(2);
+		splitPaneChiaLocalFolderTrenVaDuoi.setResizeWeight(0.5);
+		splitPaneChiaLocalFolderTrenVaDuoi.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panelLocalFolder.add(splitPaneChiaLocalFolderTrenVaDuoi);
 		
 		JPanel panelLocalFolderTop = new JPanel();
-		splitPane_3.setLeftComponent(panelLocalFolderTop);
+		splitPaneChiaLocalFolderTrenVaDuoi.setLeftComponent(panelLocalFolderTop);
 		panelLocalFolderTop.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane_5 = new JSplitPane();
-		splitPane_5.setDividerSize(2);
-		splitPane_5.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panelLocalFolderTop.add(splitPane_5);
+		//Gồm 2 phần một để hiện đường dẫn và một để hiện cây thư mục
+		JSplitPane splitPaneChiaLocalFolderTren = new JSplitPane();
+		splitPaneChiaLocalFolderTren.setDividerSize(2);
+		splitPaneChiaLocalFolderTren.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panelLocalFolderTop.add(splitPaneChiaLocalFolderTren);
 		
-		JSplitPane splitPane_6 = new JSplitPane();
-		splitPane_6.setDividerSize(2);
-		splitPane_5.setLeftComponent(splitPane_6);
+		//Phần để hiện đường dẫn
+		JSplitPane splitPaneChiaLocalSiteVaPath = new JSplitPane();
+		splitPaneChiaLocalSiteVaPath.setDividerSize(2);
+		splitPaneChiaLocalFolderTren.setLeftComponent(splitPaneChiaLocalSiteVaPath);
 		
-		JPanel panel = new JPanel();
-		splitPane_6.setLeftComponent(panel);
-		panel.setLayout(new GridLayout(1, 0, 0, 0));
+		JPanel panelLocalSite = new JPanel();
+		splitPaneChiaLocalSiteVaPath.setLeftComponent(panelLocalSite);
+		panelLocalSite.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JLabel lblNewLabel_2 = new JLabel("  Local site:");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		panel.add(lblNewLabel_2);
+		panelLocalSite.add(lblNewLabel_2);
 		
-		JPanel panel_1 = new JPanel();
-		splitPane_6.setRightComponent(panel_1);
-		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
+		JPanel panelLocalPath = new JPanel();
+		splitPaneChiaLocalSiteVaPath.setRightComponent(panelLocalPath);
+		panelLocalPath.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		textField = new JTextField();
-		panel_1.add(textField);
-		textField.setColumns(10);
-		splitPane_6.setDividerLocation(72);
+		txtFLocalPath = new JTextField();
+		panelLocalPath.add(txtFLocalPath);
+		txtFLocalPath.setColumns(10);
+		splitPaneChiaLocalSiteVaPath.setDividerLocation(72);
 		
+		//Phần để hiện cây thư mục
 		JScrollPane scrollPane = new JScrollPane();
-		splitPane_5.setRightComponent(scrollPane);
+		splitPaneChiaLocalFolderTren.setRightComponent(scrollPane);
 		
-		JPanel panel_2 = new JPanel();
-		scrollPane.setViewportView(panel_2);
-		panel_2.setLayout(new GridLayout(1, 0, 0, 0));
+		//Khởi tạo và set Cây thư mục lấy từ lớp panelLocalTree tạo bên Utils
+		JPanel panelLocalTree = new JPanel();
+		scrollPane.setViewportView(panelLocalTree);
+		panelLocalTree.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		FileTreePanel UTree = new FileTreePanel("D:\\");
 		JTree tree = UTree.tree();
-		panel_2.add(tree);
-		splitPane_5.setDividerLocation(25);
+		panelLocalTree.add(tree);
+		splitPaneChiaLocalFolderTren.setDividerLocation(25);
+				
+		JPanel panelLocalFolderBottom = new JPanel();
+		splitPaneChiaLocalFolderTrenVaDuoi.setRightComponent(panelLocalFolderBottom);
+		splitPaneChiaLocalFolderTrenVaDuoi.setDividerLocation(0.5);
 		
-		//FileTreePanel localTree = new FileTreePanel("D:\\");
-		
-		JPanel localSite2 = new JPanel();
-		splitPane_3.setRightComponent(localSite2);
-		splitPane_3.setDividerLocation(0.5);
-		
+		//Phần phải: Remote Site (Path và FolderTree)
 		JPanel panelRemoteFolder = new JPanel();
-		splitPane_2.setRightComponent(panelRemoteFolder);
+		splitPaneChiaLocalVaRemoteFolder.setRightComponent(panelRemoteFolder);
 		panelRemoteFolder.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane_4 = new JSplitPane();
-		splitPane_4.setDividerSize(2);
-		splitPane_4.setResizeWeight(0.5);
-		splitPane_4.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panelRemoteFolder.add(splitPane_4);
+		//Chia thành 2 phần, phần trên để hiện đường dẫn và cây thư mục, phần dưới để phát triển thêm
+		JSplitPane splitPaneChỉaemoteFolderTrenVaDuoi = new JSplitPane();
+		splitPaneChỉaemoteFolderTrenVaDuoi.setDividerSize(2);
+		splitPaneChỉaemoteFolderTrenVaDuoi.setResizeWeight(0.5);
+		splitPaneChỉaemoteFolderTrenVaDuoi.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panelRemoteFolder.add(splitPaneChỉaemoteFolderTrenVaDuoi);
 		
-		JPanel panel_8 = new JPanel();
-		splitPane_4.setLeftComponent(panel_8);
-		panel_8.setLayout(new GridLayout(1, 0, 0, 0));
+		//Phần đường dẫn và cây thư mục
+		JPanel panelRemoteFolderTop = new JPanel();
+		splitPaneChỉaemoteFolderTrenVaDuoi.setLeftComponent(panelRemoteFolderTop);
+		panelRemoteFolderTop.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JSplitPane splitPane_7 = new JSplitPane();
-		splitPane_7.setDividerSize(2);
-		splitPane_7.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panel_8.add(splitPane_7);
+		//Chia thành 2 phần
+		JSplitPane splitPaneChiaRemoteFolderTren = new JSplitPane();
+		splitPaneChiaRemoteFolderTren.setDividerSize(2);
+		splitPaneChiaRemoteFolderTren.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panelRemoteFolderTop.add(splitPaneChiaRemoteFolderTren);
 		
-		JSplitPane splitPane_8 = new JSplitPane();
-		splitPane_8.setDividerSize(2);
-		splitPane_7.setLeftComponent(splitPane_8);
+		//Phần đường dẫn
+		JSplitPane splitPaneChiaRemoteSiteVaPath = new JSplitPane();
+		splitPaneChiaRemoteSiteVaPath.setDividerSize(2);
+		splitPaneChiaRemoteFolderTren.setLeftComponent(splitPaneChiaRemoteSiteVaPath);
 		
-		JPanel panel_3 = new JPanel();
-		splitPane_8.setLeftComponent(panel_3);
-		panel_3.setLayout(new GridLayout(1, 0, 0, 0));
+		JPanel panelRemoteSite = new JPanel();
+		splitPaneChiaRemoteSiteVaPath.setLeftComponent(panelRemoteSite);
+		panelRemoteSite.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JLabel lblNewLabel_3 = new JLabel("  Remote Site:");
 		lblNewLabel_3.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		panel_3.add(lblNewLabel_3);
+		panelRemoteSite.add(lblNewLabel_3);
 		
-		JPanel panel_4 = new JPanel();
-		splitPane_8.setRightComponent(panel_4);
-		panel_4.setLayout(new GridLayout(1, 0, 0, 0));
+		JPanel panelRemotePath = new JPanel();
+		splitPaneChiaRemoteSiteVaPath.setRightComponent(panelRemotePath);
+		panelRemotePath.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		textField_1 = new JTextField();
-		panel_4.add(textField_1);
+		panelRemotePath.add(textField_1);
 		textField_1.setColumns(10);
-		splitPane_8.setDividerLocation(72);
+		splitPaneChiaRemoteSiteVaPath.setDividerLocation(72);
 		
+		//Phần cây thư mục
 		JScrollPane scrollPane_1 = new JScrollPane();
-		splitPane_7.setRightComponent(scrollPane_1);
+		splitPaneChiaRemoteFolderTren.setRightComponent(scrollPane_1);
 		
-		JPanel panel_5 = new JPanel();
-		scrollPane_1.setViewportView(panel_5);
-		panel_5.setLayout(new GridLayout(1, 0, 0, 0));
+		//Khởi tạo và set cây thư mục lấy từ Server sẽ viết sau, tạm thời để JTree của swing
+		JPanel panelRemoteTree = new JPanel();
+		scrollPane_1.setViewportView(panelRemoteTree);
+		panelRemoteTree.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JTree tree_1 = new JTree();
-		panel_5.add(tree_1);
-		splitPane_7.setDividerLocation(25);
+		panelRemoteTree.add(tree_1);
+		splitPaneChiaRemoteFolderTren.setDividerLocation(25);
 		
-		JPanel panel_9 = new JPanel();
-		splitPane_4.setRightComponent(panel_9);
-		splitPane_4.setDividerLocation(0.5);
-		splitPane_2.setDividerLocation(0.5);
+		JPanel panelRemoteFolderBottom = new JPanel();
+		splitPaneChỉaemoteFolderTrenVaDuoi.setRightComponent(panelRemoteFolderBottom);
+		splitPaneChỉaemoteFolderTrenVaDuoi.setDividerLocation(0.5);
+		splitPaneChiaLocalVaRemoteFolder.setDividerLocation(0.5);
 		
 		setTitle("CLientFTP");
 		setSize(new Dimension(1800, 1440));
