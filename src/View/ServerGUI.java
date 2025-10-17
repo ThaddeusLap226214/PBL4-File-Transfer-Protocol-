@@ -13,6 +13,9 @@ import javax.swing.JTable;
 import java.awt.Font;
 import javax.swing.JMenu;
 import javax.swing.table.DefaultTableModel;
+
+import Controller.ServerController;
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -21,6 +24,12 @@ import java.awt.event.ActionEvent;
 
 public class ServerGUI extends JFrame {
 	private JTable table;
+	private ServerController controller;
+	
+	public void setController(ServerController controller) {
+		this.controller = controller;
+	}
+	
 	public ServerGUI() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,6 +143,6 @@ public class ServerGUI extends JFrame {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ServerGUI sg = new ServerGUI();
+		//ServerGUI sg = new ServerGUI();
 	}
 }

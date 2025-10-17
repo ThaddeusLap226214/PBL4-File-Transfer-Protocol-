@@ -3,32 +3,40 @@ package View;
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JMenuBar;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JSplitPane;
-import java.awt.FlowLayout;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 
+import Controller.ClientController;
 import Utils.FileTreePanel;
+import Utils.txtAreaConsole;
+
 import javax.swing.JScrollPane;
 
 public class ClientGUI extends JFrame{
+	private ClientController controller;
+	
 	private JTextField txtFHost;
 	private JTextField txtFUser;
 	private JTextField txtFPass;
 	private JTextField txtFPort;
 	private JTextField txtFLocalPath;
 	private JTextField textField_1;
+	
+	public void setController(ClientController controller) {
+		this.controller = controller;
+	}
+	
 	public ClientGUI() {
 		//những dòng setLayout GridLayout(1,0) là sẽ đặt 1 loại panel (JSplitPane) phủ toàn bộ frame đang setLayout
 		getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
@@ -116,9 +124,18 @@ public class ClientGUI extends JFrame{
 		scrollPaneCMD.setViewportView(panelCMDdirect);
 		panelCMDdirect.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		panelCMDdirect.add(textArea);
+		//Khởi tạo txtConsole kiểu JTextArea từ lớp txtAreaConsole trong Utils
+		txtAreaConsole tac = new txtAreaConsole();
+		//tac.setConsoleListener(cmd -> controller.checkCMD(cmd));
+		tac.setConsoleListener(new txtAreaConsole.ConsoleListener() {		
+			@Override
+			public void onCommandEntered(String command) {
+				// TODO Auto-generated method stub
+				controller.checkCMD(command);
+			}
+		});
+		JTextArea txtConsole = tac.getConsole();
+		panelCMDdirect.add(txtConsole);
 		splitPaneChiaLoginVaCMD.setDividerLocation(0.2);
 		
 		//Quay lại với toàn Frame lúc đầu Login và CMD ở trên còn 
@@ -263,9 +280,9 @@ public class ClientGUI extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
+	
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		ClientGUI fr = new ClientGUI();
 	}
 }
