@@ -1,148 +1,120 @@
 package View;
 
-import javax.swing.JFrame;
-import java.awt.GridLayout;
-import javax.swing.JSplitPane;
-import java.awt.Dimension;
-import javax.swing.JScrollPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JMenuBar;
-import javax.swing.JTextArea;
-import javax.swing.JTable;
-import java.awt.Font;
-import javax.swing.JMenu;
+import javax.swing.*;
+import java.awt.*;
 import javax.swing.table.DefaultTableModel;
-
 import Controller.ServerController;
-
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class ServerGUI extends JFrame {
 	private JTable table;
+	private JTextArea txtLog;
 	private ServerController controller;
-	
+	private DefaultTableModel tableModel;
+
 	public void setController(ServerController controller) {
 		this.controller = controller;
 	}
-	
+
 	public ServerGUI() {
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(new Dimension(700, 1400));
-		setTitle("ServerFTP");
-		
+		setSize(800, 600);
+		setTitle("FTP Server");
+		setLocationRelativeTo(null);
+		setLayout(new BorderLayout());
+
+		// ===== MENU BAR =====
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		JMenu menuServer = new JMenu("Server");
 		menuBar.add(menuServer);
-		
-		JMenuItem ItemConfigure = new JMenuItem("Configure...");
-		ItemConfigure.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new ServerConfigureGUI();
-			}
-		});
-		menuServer.add(ItemConfigure);
-		
-		JMenuItem ItemStart = new JMenuItem("Start");
-		menuServer.add(ItemStart);
-		
-		JMenuItem ItemStop = new JMenuItem("Stop");
-		menuServer.add(ItemStop);
-		
-		JMenuItem ItemQuit = new JMenuItem("Quit");
-		menuServer.add(ItemQuit);
-		
+
+		JMenuItem itemStart = new JMenuItem("Start");
+		JMenuItem itemStop = new JMenuItem("Stop");
+		JMenuItem itemQuit = new JMenuItem("Quit");
+
+		menuServer.add(itemStart);
+		menuServer.add(itemStop);
+		menuServer.addSeparator();
+		menuServer.add(itemQuit);
+
 		JMenu menuView = new JMenu("View");
 		menuBar.add(menuView);
-		
-		JMenuItem ItemShowUserList = new JMenuItem("Show User List");
-		menuView.add(ItemShowUserList);
-		
-		JMenuItem ItemShowLogWindow = new JMenuItem("Show Log Window");
-		menuView.add(ItemShowLogWindow);
-		
-		JMenuItem ItemClearLog = new JMenuItem("Clear Log");
-		menuView.add(ItemClearLog);
-		
+
+		JMenuItem itemClearLog = new JMenuItem("Clear Log");
+		menuView.add(itemClearLog);
+
 		JMenu menuHelp = new JMenu("Help");
 		menuBar.add(menuHelp);
-		
-		JMenuItem ItemDocumentation = new JMenuItem("Documentation");
-		menuHelp.add(ItemDocumentation);
-		
-		JMenuItem ItemAbout = new JMenuItem("About");
-		menuHelp.add(ItemAbout);
-		getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JSplitPane splitPaneChiaTextAreaVaTable = new JSplitPane();
-		splitPaneChiaTextAreaVaTable.setResizeWeight(0.65);
-		splitPaneChiaTextAreaVaTable.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		getContentPane().add(splitPaneChiaTextAreaVaTable);
-		
-		JScrollPane scrollPaneChuaTxtArea = new JScrollPane();
-		splitPaneChiaTextAreaVaTable.setLeftComponent(scrollPaneChuaTxtArea);
-		
-		JPanel panelChuaTxtArea = new JPanel();
-		scrollPaneChuaTxtArea.setViewportView(panelChuaTxtArea);
-		panelChuaTxtArea.setLayout(new BorderLayout(0, 0));
-		
-		JTextArea textArea = new JTextArea();
-		panelChuaTxtArea.add(textArea, BorderLayout.CENTER);
-		
-		JScrollPane scrollPaneChuaTable = new JScrollPane();
-		scrollPaneChuaTable.setPreferredSize(new Dimension(0, 65));
-		scrollPaneChuaTable.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		splitPaneChiaTextAreaVaTable.setRightComponent(scrollPaneChuaTable);
-		
-		JPanel panelChuaTable = new JPanel();
-		panelChuaTable.setPreferredSize(new Dimension(0, 0));
-		scrollPaneChuaTable.setViewportView(panelChuaTable);
-		panelChuaTable.setLayout(new BorderLayout(0, 0));
-		
-		table = new JTable();
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"Date/Time", "Session ID", "Protocols", "Host", "User", "Transfer"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Integer.class, String.class, String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(107);
-		table.getColumnModel().getColumn(0).setMinWidth(85);
-		table.getColumnModel().getColumn(1).setPreferredWidth(65);
-		table.getColumnModel().getColumn(1).setMinWidth(65);
-		table.getColumnModel().getColumn(2).setMinWidth(65);
-		table.getColumnModel().getColumn(3).setPreferredWidth(82);
-		table.getColumnModel().getColumn(3).setMinWidth(65);
-		table.getColumnModel().getColumn(4).setPreferredWidth(65);
-		table.getColumnModel().getColumn(4).setMinWidth(65);
-		table.getColumnModel().getColumn(5).setPreferredWidth(5000);
-		table.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		JScrollPane ScrollPaneChuaTableHienTenCot = new JScrollPane(table);
-		panelChuaTable.add(ScrollPaneChuaTableHienTenCot, BorderLayout.CENTER);
-		splitPaneChiaTextAreaVaTable.setDividerLocation(0.65);
+
+		JMenuItem itemAbout = new JMenuItem("About");
+		menuHelp.add(itemAbout);
+
+		// ===== MAIN SPLIT =====
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setResizeWeight(0.7);
+		add(splitPane, BorderLayout.CENTER);
+
+		// ===== LOG AREA =====
+		txtLog = new JTextArea();
+		txtLog.setFont(new Font("Consolas", Font.PLAIN, 14));
+		txtLog.setEditable(false);
+		JScrollPane scrollLog = new JScrollPane(txtLog);
+		splitPane.setTopComponent(scrollLog);
+
+		// ===== TABLE =====
+		tableModel = new DefaultTableModel(
+				new Object[][] {},
+				new String[] { "Date/Time", "Session ID", "Host", "User", "Status" });
+		table = new JTable(tableModel);
+		JScrollPane scrollTable = new JScrollPane(table);
+		splitPane.setBottomComponent(scrollTable);
+
+		// ====== ACTIONS ======
+		itemStart.addActionListener(e -> controller.startServer());
+		itemStop.addActionListener(e -> controller.stopServer());
+		itemQuit.addActionListener(e -> System.exit(0));
+		itemClearLog.addActionListener(e -> txtLog.setText(""));
+		itemAbout.addActionListener(e -> JOptionPane.showMessageDialog(this,
+				"Simple FTP Server\nBy: Your Team", "About", JOptionPane.INFORMATION_MESSAGE));
+
 		setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//ServerGUI sg = new ServerGUI();
+	// ==================== PUBLIC METHODS =====================
+	public void appendLog(String msg) {
+		SwingUtilities.invokeLater(() -> {
+			txtLog.append(msg + "\n");
+			txtLog.setCaretPosition(txtLog.getDocument().getLength());
+		});
+	}
+
+	public void addClientSession(String date, int sessionId, String host, String user, String status) {
+		SwingUtilities.invokeLater(() -> {
+			tableModel.addRow(new Object[] { date, sessionId, host, user, status });
+		});
+	}
+
+	public void updateClientStatus(int sessionId, String newStatus) {
+		SwingUtilities.invokeLater(() -> {
+			for (int i = 0; i < tableModel.getRowCount(); i++) {
+				if ((int) tableModel.getValueAt(i, 1) == sessionId) {
+					tableModel.setValueAt(newStatus, i, 4);
+					break;
+				}
+			}
+		});
+	}
+
+	public void updateClientUser(int sessionId, String username) {
+		SwingUtilities.invokeLater(() -> {
+			for (int i = 0; i < tableModel.getRowCount(); i++) {
+				int id = (int) tableModel.getValueAt(i, 1); // Session ID là cột 1
+				if (id == sessionId) {
+					tableModel.setValueAt(username, i, 3); // ✅ ĐÚNG: cột 3 là "User"
+					break;
+				}
+			}
+		});
 	}
 }

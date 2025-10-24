@@ -1,0 +1,75 @@
+package Model;
+
+import java.io.*;
+import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import Controller.ServerController;
+
+public class ClientHandler implements Runnable {
+    private Socket socket;
+    private int sessionId;
+    private ServerController controller;
+    private DataInputStream in;
+    private DataOutputStream out;
+    private String username = "Unknown";
+
+    public ClientHandler(Socket socket, int sessionId, ServerController controller) {
+        this.socket = socket;
+        this.sessionId = sessionId;
+        this.controller = controller;
+        try {
+            in = new DataInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            controller.appendLog("❌ Lỗi tạo stream: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            String clientHost = socket.getInetAddress().getHostAddress();
+            controller.addClientSession(new SimpleDateFormat("HH:mm:ss").format(new Date()),
+                    sessionId, clientHost, username, "Connected");
+
+            controller.appendLog("Client kết nối: " + clientHost);
+
+            while (true) {
+                String msg = in.readUTF();
+                controller.appendLog("[Client " + sessionId + "] " + msg);
+
+                // Xử lý lệnh từ client
+                String[] parts = msg.trim().split("\\s+", 2);
+                String cmd = parts[0].toUpperCase();
+                String arg = (parts.length > 1) ? parts[1] : "";
+
+                switch (cmd) {
+                    case "USER":
+                        username = arg.isEmpty() ? "Unknown" : arg;
+                        controller.updateClientUser(sessionId, username);
+                        out.writeUTF("331 Username ok, need password.\r\n");
+                        break;
+
+                    case "PASS":
+                        out.writeUTF("230 Login successful.\r\n");
+                        break;
+
+                    case "QUIT":
+                        controller.appendLog("[Client " + sessionId + "] đã thoát");
+                        controller.updateClientStatus(sessionId, "Disconnected");
+                        socket.close();
+                        return;
+
+                    default:
+                        out.writeUTF("500 Unknown command.\r\n");
+                        break;
+                }
+            }
+
+        } catch (IOException e) {
+            controller.appendLog("⚠️ Client " + sessionId + " ngắt kết nối.");
+            controller.updateClientStatus(sessionId, "Disconnected");
+        }
+    }
+}

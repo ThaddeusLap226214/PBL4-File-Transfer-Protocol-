@@ -6,38 +6,47 @@ import View.ClientGUI;
 public class ClientController {
 	private ClientGUI view;
 	private ClientModel model;
-	
+
 	public ClientController(ClientGUI view, ClientModel model) {
-		this.model = model;
 		this.view = view;
+		this.model = model;
 	}
-	
+
+	// Dùng cho console (khi người dùng nhập lệnh ở dưới)
 	public void checkCMD(String cmd) {
-		String[] Cmd = cmd.trim().split("\\s+", 2);
-		String command = Cmd[0].toUpperCase();
-		String argument = (Cmd.length > 1) ? Cmd[1] : "";
-		switch(command) {
-			case "USER":
-				//
-				break;
-			case "PASS":
-				//
-				break;
-			case "PWD":
-				//
-				break;
-			case "LIST":
-				//
-				break;
+		if (cmd == null || cmd.isEmpty())
+			return;
+		String[] parts = cmd.trim().split("\\s+", 2);
+		String command = parts[0].toUpperCase();
+		String argument = (parts.length > 1) ? parts[1] : "";
+
+		switch (command) {
 			case "QUIT":
-				//
+				model.disconnect();
 				break;
 			default:
-				//gửi lại view
+				model.sendMessage(cmd);
 				break;
 		}
 	}
-	public static void main(String[] args) {
-		
+
+	// Dùng khi người dùng nhấn nút Connect
+	public void connectToServer(String host, int port, String user, String pass) {
+		model.connect(host, port, user, pass);
+	}
+
+	// Gửi lệnh từ GUI
+	public void sendCommand(String cmd) {
+		model.sendMessage(cmd);
+	}
+
+	// Khi nhận tin nhắn từ server
+	public void onMessageFromServer(String msg) {
+		view.appendConsole(msg);
+	}
+
+	// Khi kết nối đóng
+	public void onConnectionClosed() {
+		view.appendConsole("Kết nối đã bị đóng.\n");
 	}
 }
