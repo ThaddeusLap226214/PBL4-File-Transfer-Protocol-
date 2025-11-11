@@ -1,27 +1,22 @@
-package Model;
+package Controller;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import Controller.ServerController;
-
-public class ServerModel implements Runnable{
+public class ServerSoc implements Runnable{
 	private ServerSocket server;
-	private ServerController controller;
+	private ControllerEventListener controller;
 	
-	public void setController(ServerController controller) {
+	public ServerSoc(int port, ControllerEventListener controller) {
 		this.controller = controller;
-	}
-	
-	public ServerModel(int port) {
 		try {
 			server = new ServerSocket(port);
 		} catch (IOException e) {
 			System.out.println("Server không mở cổng được " +e.getMessage() );
 		}
 	}
-
+	
 	@Override
 	public void run() {
 		int count = 1;
@@ -29,28 +24,14 @@ public class ServerModel implements Runnable{
 			try {
 				Socket soc = server.accept();
 				System.out.println("Client accepted" + count++);
-				new Thread(new ClientHandler(soc)).start();
+				ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller);
+				ccch.send("220-Welcome to my simple FTP server");
+				ccch.send("220 Ready");
+				new Thread(ccch).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-
 }
-
-class ClientHandler extends Thread{
-	private Socket soc;
-	
-	public ClientHandler(Socket soc) {
-		this.soc = soc;
-	}
-	
-	@Override
-	public void run() {
-		while(true) {
-			
-		}
-	}
-}
-
