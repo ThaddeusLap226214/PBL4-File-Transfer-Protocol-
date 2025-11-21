@@ -15,6 +15,18 @@ public class ControlConnectionClientHandle extends Thread{
 	private BufferedWriter writer;
 	private CommandHandle ch = new CommandHandle();
 	
+	//thêm tạm thời session
+	private Session session;
+	
+	//hàm dựng với session
+	public ControlConnectionClientHandle(Socket soc, ControllerEventListener cel, int session) {
+		this.cel = cel;
+		this.soc = soc;
+		this.session = new Session(session);
+		setDataIOStream();
+	}
+	
+	
 	private void setDataIOStream() {
 		if(soc.isConnected()) {
 			try {
@@ -27,11 +39,11 @@ public class ControlConnectionClientHandle extends Thread{
 		}
 	}
 	
-	public ControlConnectionClientHandle(Socket soc, ControllerEventListener cel) {
-		this.cel = cel;
-		this.soc = soc;
-		setDataIOStream();
-	}
+//	public ControlConnectionClientHandle(Socket soc, ControllerEventListener cel) {
+//		this.cel = cel;
+//		this.soc = soc;
+//		setDataIOStream();
+//	}
 	
 	private String receive() {
 		String command = null;
@@ -60,7 +72,7 @@ public class ControlConnectionClientHandle extends Thread{
 		ch.setControlConnectionHandle(this);
 		while(true) {
 			String command = receive();
-			cel.onClientCommand(1,"user1" , "127.0.0.1",command);
+			cel.onClientCommand(session.getSessionID(), session.getUsername() , "127.0.0.1",command);
 			ch.handle(command);
 		}
 	}

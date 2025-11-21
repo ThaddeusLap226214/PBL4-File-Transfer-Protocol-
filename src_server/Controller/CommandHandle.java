@@ -16,6 +16,7 @@ public class CommandHandle implements ResponseListener{
 		ccch.send(response);
 	}
 	
+//	public void handle(String cmd, ControlConnectionClientHandle ccch) {
 	public void handle(String cmd) {
 		String[] Cmd = cmd.trim().split("\\s+", 2);
 		String command = Cmd[0].toUpperCase();

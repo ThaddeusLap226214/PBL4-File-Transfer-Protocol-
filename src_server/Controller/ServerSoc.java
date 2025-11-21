@@ -19,12 +19,18 @@ public class ServerSoc implements Runnable{
 	
 	@Override
 	public void run() {
-		int count = 1;
+		int count = 0;
 		while(true) {
 			try {
 				Socket soc = server.accept();
-				System.out.println("Client accepted" + count++);
-				ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller);
+				System.out.println("Client accepted, session " + ++count);
+				
+				//hàm dựng với session
+				ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller, count);
+				
+				//ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller);
+				
+				
 				ccch.send("220-Welcome to my simple FTP server");
 				ccch.send("220 Ready");
 				new Thread(ccch).start();

@@ -44,7 +44,9 @@ public class ModelBO {
 	}
 	
 	public void handlePWD() {
-//		rl.onRespose("257 \"" + model.getCurrentDirectory("0") + "\" is current directory.");
+		//gọi AccountDAO kiểm tra đăng nhập, lấy id, 
+		//dùng id để vào PermissionDAO lấy fid, từ fid vào PathDAO để lấy đường dẫn
+		
 		rl.onRespose("257 \"" + "/" + "\" is current directory.");
 	}
 	
