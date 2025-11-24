@@ -1,4 +1,4 @@
-package Controller;
+package FTP_Protocol;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,21 +8,25 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+import FTPController.FTPControllerEventListener;
+
 public class ControlConnectionClientHandle extends Thread{
-	private ControllerEventListener cel;
+	private FTPControllerEventListener cel;
 	private Socket soc;
 	private BufferedReader reader;
 	private BufferedWriter writer;
-	private CommandHandle ch = new CommandHandle();
+	private CommandHandle ch;
 	
 	//thêm tạm thời session
 	private Session session;
 	
 	//hàm dựng với session
-	public ControlConnectionClientHandle(Socket soc, ControllerEventListener cel, int session) {
+	public ControlConnectionClientHandle(Socket soc, CommandHandle ch, FTPControllerEventListener cel, int session) {
 		this.cel = cel;
 		this.soc = soc;
-		this.session = new Session(session);
+		this.ch = ch;
+		DataConnectionHandle dataConnect = new DataConnectionHandle();
+		this.session = new Session(session, dataConnect);
 		setDataIOStream();
 	}
 	
@@ -69,11 +73,11 @@ public class ControlConnectionClientHandle extends Thread{
 	
 	@Override
 	public void run() {
-		ch.setControlConnectionHandle(this);
+//		ch.setControlConnectionHandle(this);
 		while(true) {
 			String command = receive();
 			cel.onClientCommand(session.getSessionID(), session.getUsername() , "127.0.0.1",command);
-			ch.handle(command);
+			ch.handle(command, this, this.session);
 		}
 	}
 }

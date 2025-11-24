@@ -1,11 +1,11 @@
 package View;
 
-import Controller.Controller;
+import FTPController.FTPController;
 
 public class ViewAdminFTPServer {
-	private Controller controller;
+	private FTPController controller;
 	
-	public void setController(Controller controller) {
+	public void setController(FTPController controller) {
 		this.controller = controller;
 	}
 

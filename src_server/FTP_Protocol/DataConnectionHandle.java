@@ -1,4 +1,4 @@
-package Model;
+package FTP_Protocol;
 
 import java.io.IOException;
 import java.net.ServerSocket;

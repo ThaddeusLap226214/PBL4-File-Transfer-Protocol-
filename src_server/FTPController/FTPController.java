@@ -1,29 +1,18 @@
-package Controller;
+package FTPController;
 
-import Model.ModelBO;
+import FTP_Protocol.ServerSoc;
 import View.*;
 
-public class Controller implements ControllerEventListener{
-	private ModelBO modelBO;
+public class FTPController implements FTPControllerEventListener{
 	private ViewAdminFTPServer viewConnect;
-	private ViewConfigure viewConfig;
-	
-	public void setModelBO(ModelBO modelBO) {
-		this.modelBO = modelBO;
-	}
 	
 	public void setViewConnect(ViewAdminFTPServer view) {
 		this.viewConnect = view;
 	}
 	
-	public void setViewConfig(ViewConfigure view) {
-		this.viewConfig = view;
-	}
-	
-	public Controller(ViewAdminFTPServer viewConnect, ViewConfigure viewConfig) {
+	public FTPController(ViewAdminFTPServer viewConnect) {
 		setViewConnect(viewConnect);
-		setViewConfig(viewConfig);
-		//tạm thời
+		//tạm thời cổng 5000
 		ServerSoc server = new ServerSoc(5000, this);
 		new Thread(server).start();
 	}

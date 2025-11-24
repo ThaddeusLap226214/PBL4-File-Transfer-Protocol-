@@ -1,14 +1,17 @@
-package Controller;
+package FTP_Protocol;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import FTPController.FTPControllerEventListener;
+
 public class ServerSoc implements Runnable{
+	private CommandHandle ch = new CommandHandle();
 	private ServerSocket server;
-	private ControllerEventListener controller;
+	private FTPControllerEventListener controller;
 	
-	public ServerSoc(int port, ControllerEventListener controller) {
+	public ServerSoc(int port, FTPControllerEventListener controller) {
 		this.controller = controller;
 		try {
 			server = new ServerSocket(port);
@@ -26,7 +29,7 @@ public class ServerSoc implements Runnable{
 				System.out.println("Client accepted, session " + ++count);
 				
 				//hàm dựng với session
-				ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller, count);
+				ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, ch, controller, count);
 				
 				//ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller);
 				

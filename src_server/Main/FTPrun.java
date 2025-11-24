@@ -3,18 +3,20 @@ package Main;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import Controller.Controller;
+import AdminController.AdminController;
+import FTPController.FTPController;
 import Model.ModelBO;
 import View.*;
 
 public class FTPrun {
 	private ViewAdminFTPServer viewConnect = new ViewAdminFTPServer();
-	private ViewConfigure viewConfig = new ViewConfigure();
-	private Controller controller;
-	private ModelBO model;
+	private ViewAdminConfigure viewConfig = new ViewAdminConfigure();
+	private FTPController controllerFTP;
+	private AdminController controllerAdmin;
 	
 	public FTPrun() {
-		controller = new Controller(viewConnect, viewConfig);
+		controllerFTP = new FTPController(viewConnect);
+		controllerAdmin = new AdminController(viewConfig);
 	}
 
 	public static void main(String[] args) {

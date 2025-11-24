@@ -1,6 +1,4 @@
-package Controller;
-
-import Model.DataConnectionHandle;
+package FTP_Protocol;
 
 public class Session {
 	private int sessionID;		//mã phiên
@@ -8,6 +6,9 @@ public class Session {
 	private boolean loggedIn;	//Trạng thái login
 	private String currentDirectory;	//thư mục hiện tại
 	private DataConnectionHandle dataConnect;
+	public DataConnectionHandle getDataConnect() {
+		return dataConnect;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -32,6 +33,11 @@ public class Session {
 	public Session(int sessionID) {
 		super();
 		this.sessionID = sessionID;
+	}
+	public Session(int sessionID, DataConnectionHandle dataConnect) {
+		super();
+		this.sessionID = sessionID;
+		this.dataConnect = dataConnect;
 	}
 	
 }
