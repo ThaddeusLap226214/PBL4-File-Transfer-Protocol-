@@ -1,5 +1,7 @@
 package Model.Permission;
 
-public interface PermissionDAO {
+import Model.BaseDAO;
+
+public class PermissionDAO extends BaseDAO{
 
 }

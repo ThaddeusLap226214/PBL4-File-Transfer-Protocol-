@@ -16,8 +16,6 @@ public class ControlConnectionClientHandle extends Thread{
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private CommandHandle ch;
-	
-	//thêm tạm thời session
 	private Session session;
 	
 	//hàm dựng với session
@@ -28,6 +26,15 @@ public class ControlConnectionClientHandle extends Thread{
 		DataConnectionHandle dataConnect = new DataConnectionHandle();
 		this.session = new Session(session, dataConnect);
 		setDataIOStream();
+	}
+	
+	public void close() {
+		try {
+			this.soc.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -42,12 +49,6 @@ public class ControlConnectionClientHandle extends Thread{
 			
 		}
 	}
-	
-//	public ControlConnectionClientHandle(Socket soc, ControllerEventListener cel) {
-//		this.cel = cel;
-//		this.soc = soc;
-//		setDataIOStream();
-//	}
 	
 	private String receive() {
 		String command = null;
@@ -64,7 +65,7 @@ public class ControlConnectionClientHandle extends Thread{
 		try {
 			writer.write(request + "\r\n");
 			writer.flush();
-			cel.onServerRequest(1,"user1" , "127.0.0.1",request);
+			cel.onServerRequest(session.getSessionID(), session.getUsername(), "127.0.0.1",request);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -24,7 +24,7 @@ public class FTPrun {
 		try {
 			System.out.println("Server running at:");
 			System.out.println("LAN address: " + InetAddress.getLocalHost().getHostAddress());
-				   System.out.println("Port: 5000");
+				   System.out.println("Port: 21");
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

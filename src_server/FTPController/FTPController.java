@@ -12,8 +12,8 @@ public class FTPController implements FTPControllerEventListener{
 	
 	public FTPController(ViewAdminFTPServer viewConnect) {
 		setViewConnect(viewConnect);
-		//tạm thời cổng 5000
-		ServerSoc server = new ServerSoc(5000, this);
+		//cổng 21
+		ServerSoc server = new ServerSoc(21, this);
 		new Thread(server).start();
 	}
 		

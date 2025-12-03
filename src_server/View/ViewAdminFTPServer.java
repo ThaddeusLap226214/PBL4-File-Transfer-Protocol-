@@ -9,8 +9,8 @@ public class ViewAdminFTPServer {
 		this.controller = controller;
 	}
 
-	public void appendLog(int session, String username, String clientAddress, String msg) {
+	public void appendLog(int sessionId, String username, String clientAddress, String msg) {
 		// TODO Auto-generated method stub
-		System.out.println(msg);
+		System.out.println("id: "+ sessionId + " user: "+ username + " msg: " + msg);
 	}
 }

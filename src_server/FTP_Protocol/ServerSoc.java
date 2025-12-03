@@ -30,10 +30,6 @@ public class ServerSoc implements Runnable{
 				
 				//hàm dựng với session
 				ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, ch, controller, count);
-				
-				//ControlConnectionClientHandle ccch = new ControlConnectionClientHandle(soc, controller);
-				
-				
 				ccch.send("220-Welcome to my simple FTP server");
 				ccch.send("220 Ready");
 				new Thread(ccch).start();

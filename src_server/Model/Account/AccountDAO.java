@@ -1,5 +1,7 @@
 package Model.Account;
 
-public interface AccountDAO {
+import Model.BaseDAO;
+
+public class AccountDAO extends BaseDAO{
 
 }
