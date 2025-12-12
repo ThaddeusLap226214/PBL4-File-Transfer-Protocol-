@@ -1,5 +1,5 @@
 package Model.File;
 
-public class FileDAO {
+public interface FileDAO {
 
 }

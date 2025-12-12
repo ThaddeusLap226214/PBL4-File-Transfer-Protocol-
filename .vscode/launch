@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "Main.FTPrun",
+            "projectName": "PBL4-File-Transfer-Protocol-",
+            "classPaths": [
+                "lib/mysql-connector-j-9.5.0.jar"
+            ]
+        }
+    ]
+}

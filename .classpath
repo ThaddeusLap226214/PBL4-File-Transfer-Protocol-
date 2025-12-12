@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src_server"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-22">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="build/classes"/>
+    <!-- Thư mục source code -->
+    <classpathentry kind="src" path="src_server"/>
+    
+    <!-- JRE -->
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-22">
+        <attributes>
+            <attribute name="module" value="true"/>
+        </attributes>
+    </classpathentry>
+    
+    <!-- Thư mục output (nơi compile ra .class) -->
+    <classpathentry kind="output" path="build/classes"/>
+    
+    <!-- Thư viện MySQL Connector/J -->
+    <classpathentry kind="lib" path="lib/mysql-connector-j-9.5.0.jar"/>
 </classpath>
