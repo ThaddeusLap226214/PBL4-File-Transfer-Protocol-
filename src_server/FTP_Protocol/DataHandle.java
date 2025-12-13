@@ -13,6 +13,8 @@ import Model.Bean.FolderPath;
 
 public class DataHandle {
 	private SystemData SD = new SystemData();
+	
+	//Hàm quản lý, xử lý dữ liệu danh sách thư mục, file và gửi qua cho client
 	public boolean HandleSendFolderData(List<FolderPath> listFp, OutputStream dataOut) {
 		//dựa vào nativePath lấy thêm thông tin cho các Folder
 		List<FileInfo> listInfoFolder = new ArrayList<FileInfo>(); //danh sách thông tin thư mục
@@ -87,5 +89,23 @@ public class DataHandle {
             e.printStackTrace();
             return false;
         }
+	}
+
+	//dùng đường dẫn thực để lấy danh sách thư mục con
+	public List<FolderPath> getListFolderChild(String fatherVirtualPath, String nativePath) {
+		//Danh sách trả về
+		List<FolderPath> listFp = new ArrayList<FolderPath>();
+		
+		//Gọi lên system để lấy danh sách đường dẫn các thư mục con
+		String[] listChildNativePath = SD.listChildRealPaths(nativePath);
+		
+		//Từ danh sách ở trên tạo danh sách FolderPath 
+		for (String childNatPath : listChildNativePath) {
+			String childVirPath = FolderPath.createVirtualPath(childNatPath, fatherVirtualPath);
+			FolderPath fp = new FolderPath(null, childVirPath, childNatPath);
+			listFp.add(fp);
+		}
+		//Trả về
+		return listFp;
 	}
 }

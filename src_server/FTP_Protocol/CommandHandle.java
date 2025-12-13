@@ -224,22 +224,39 @@ public class CommandHandle {
 			Socket dataSocket = dataConnect.openDataSocket();
 			ccch.send("150 Opening data connection.");
 			OutputStream dataOut = dataSocket.getOutputStream();
-			boolean t = false; //cờ để xem truyền thành công không
+			boolean transferTrue = false; //cờ để xem truyền thành công không
 			//lấy thư mục cần LIST
-			String path;
+			String virtualPath;
 			if (argument == null || argument.isEmpty()) {
 				//nếu lệnh LIST không tham số thì dùng thư mục hiện tại
-				path = session.getCurrentDirectory();
+				virtualPath = session.getCurrentDirectory();
 				
 				//trường hợp một lần đầu lấy LIST
-				if(path.equals("/")) {
+				if(virtualPath.equals("/")) {
 					List<FolderPath> listFd = modelBO.getListFolderPermission(session.getUserId());
+					
 					//thêm vào cache
 					for(FolderPath fp : listFd) {
 						session.getCacheFolder().add(fp.getVirtualPath(), fp);
 					}
+					
 					//gọi HandleData để xử lý chuyển đổi dữ liệu và gửi đi
-					t = dataHandle.HandleSendFolderData(listFd, dataOut);
+					transferTrue = dataHandle.HandleSendFolderData(listFd, dataOut);
+				} else {
+					//Kiểm tra đường dẫn ảo phải có trong cache
+					if(session.getCacheFolder().confirmPath(virtualPath)) {
+						//gọi để lấy danh sách thư mục con từ hệ thông file
+						String nativePath = session.getCacheFolder().getNativePath(virtualPath);
+						List<FolderPath> listFd = dataHandle.getListFolderChild(virtualPath, nativePath);
+						
+						//thêm vào cache
+						for(FolderPath fp : listFd) {
+							session.getCacheFolder().add(fp.getVirtualPath(), fp);
+						}
+						
+						//gọi HandleData để xử lý chuyển đổi dữ liệu và gửi đi
+						transferTrue = dataHandle.HandleSendFolderData(listFd, dataOut);
+					}
 				}
 	        } else {
 //	            path = model.resolvePath(argument); // tự viết thêm hàm để ghép tương đối/tuyệt đối
@@ -256,7 +273,7 @@ public class CommandHandle {
 	        dataSocket.close();
 	        dataConnect.close();
 	        dataConnect.resetMode();
-	        if (t == true) {
+	        if (transferTrue == true) {
 		        ccch.send("226 Transfer complete.");
 	        }
 	        else {

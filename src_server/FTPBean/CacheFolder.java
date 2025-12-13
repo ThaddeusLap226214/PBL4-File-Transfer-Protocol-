@@ -11,7 +11,8 @@ public class CacheFolder {
 	public void add(String key, FolderPath fp) {
 		cache.put(key, fp);
 	}
-
+	
+	//lấy thư mục cha (đường dẫn ảo cha)
 	public String getParentDir(String path) {
 		if (path == null || path.isEmpty()) {
 	        return "/";
@@ -37,10 +38,23 @@ public class CacheFolder {
 	    String parent = path.substring(0, lastSlash);
 	    return parent.isEmpty() ? "/" : parent;
 	}
-	
-	public String confirmPath(String cwdPath) {
-		//bỏ qua kiểm tra nó có tồn tại trong cache không
-		
-		return null;
+	//Kiểm tra đường dẫn ảo có tồn tại trong cache không
+	public boolean confirmPath(String path) {
+		if (path == null || path.isEmpty()) {
+	        return false;
+	    }
+
+	    // Chuẩn hóa: bỏ dấu / cuối nếu có (trừ root "/")
+	    if (path.length() > 1 && path.endsWith("/")) {
+	        path = path.substring(0, path.length() - 1);
+	    }
+
+	    return cache.containsKey(path);
 	}
+	
+	//Lấy đường dẫn thực
+	public String getNativePath(String path) {
+		return cache.get(path).getNativePath();
+	}
+
 }
