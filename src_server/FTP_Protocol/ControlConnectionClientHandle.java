@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+import FTPBean.Session;
 import FTPController.FTPControllerEventListener;
 
 public class ControlConnectionClientHandle extends Thread{
@@ -55,7 +56,6 @@ public class ControlConnectionClientHandle extends Thread{
 		try {
 			command = reader.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return command;
@@ -77,8 +77,13 @@ public class ControlConnectionClientHandle extends Thread{
 //		ch.setControlConnectionHandle(this);
 		while(true) {
 			String command = receive();
-			cel.onClientCommand(session.getSessionID(), session.getUsername() , "127.0.0.1",command);
-			ch.handle(command, this, this.session);
+			if(command != null) {
+				cel.onClientCommand(session.getSessionID(), session.getUsername() , "127.0.0.1",command);
+				ch.handle(command, this, this.session);
+			}
+			else {
+				
+			}
 		}
 	}
 }

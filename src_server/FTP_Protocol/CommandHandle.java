@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.List;
 
+import FTPBean.Session;
 import Model.ModelBO;
-import Utils.FolderInfo;
+import Model.Bean.FolderPath;
 
 public class CommandHandle {
 	private ModelBO modelBO = new ModelBO();
+	private DataHandle dataHandle = new DataHandle();
 
 	public void handle(String cmd, ControlConnectionClientHandle ccch, Session session) {
 		String[] Cmd = cmd.trim().split("\\s+", 2);
@@ -38,6 +40,12 @@ public class CommandHandle {
 				return;
 			case "PWD":
 				handlePWD(argument, ccch, session);
+				return;
+			case "CWD":
+				handleCWD(argument, ccch, session);
+				return;
+			case "CDUP":
+				handleCDUP(argument, ccch, session);
 				return;
 			case "PASV":
 				handlePASV(argument, ccch, session);
@@ -89,8 +97,8 @@ public class CommandHandle {
 			session.setUserId(userId);	//set userId dùng cho các lần truy vấn sau
 			session.setCurrentDirectory("/");	//đặt thư mục hiện tại là "/" làm gốc
 			//khởi tạo gốc trong cacheFolder
-			FolderInfo root = new FolderInfo(0, "/");
-			session.getCacheFolder().put("/", root);
+			FolderPath root = new FolderPath(0, "/");
+			session.getCacheFolder().add("/", root);
 			ccch.send("230 User logged in, proceed.");
 		} else {
 			session.setUsername(null);
@@ -137,7 +145,41 @@ public class CommandHandle {
 		} else {
 			ccch.send("550 Can't get current directory.");
 		}
-	}	
+	}
+	private void handleCWD(String argument, ControlConnectionClientHandle ccch, Session session) {
+		//Kiểm tra có tồn tại CWD không
+		//để làm sau
+		
+		//CDUP
+		if(argument.equals("..")) {
+			handleCDUP(argument, ccch, session);
+			return;
+		}
+		//Có tham số
+		String nextPath;
+		//Đường dẫn tuyệt đối
+		if(argument.startsWith("/")) {
+			nextPath = argument;
+		} else {
+			String currentDir = session.getCurrentDirectory();
+			if(currentDir.endsWith("/")) {
+				nextPath = currentDir + argument;
+			} else {
+				nextPath = currentDir + "/" + argument;
+			}
+		}
+		//tạm bỏ qua kiểm tra nghiệp vụ (tồn tại, quyền,...)
+		//nextPath = session.getCacheFolder().confirmPath(argument);
+		session.setCurrentDirectory(nextPath);
+		ccch.send("250 CWD command successful.");
+	}
+	private void handleCDUP(String argument, ControlConnectionClientHandle ccch, Session session) {
+		String currentDir = session.getCurrentDirectory();
+		//Lấy thư mục cha trong cache
+		String parentDir = session.getCacheFolder().getParentDir(currentDir);
+		session.setCurrentDirectory(parentDir);
+		ccch.send("250 CDUP command successful.");
+	}
 	
 	private void handlePASV(String argument, ControlConnectionClientHandle ccch, Session session) {
 		//Kiểm tra login trước
@@ -182,14 +224,23 @@ public class CommandHandle {
 			Socket dataSocket = dataConnect.openDataSocket();
 			ccch.send("150 Opening data connection.");
 			OutputStream dataOut = dataSocket.getOutputStream();
-			
+			boolean t = false; //cờ để xem truyền thành công không
 			//lấy thư mục cần LIST
 			String path;
 			if (argument == null || argument.isEmpty()) {
 				//nếu lệnh LIST không tham số thì dùng thư mục hiện tại
 				path = session.getCurrentDirectory();
-				//mặc định viết cho trường hợp một lần đầu lấy LIST
-				ArrayList<FolderInfo> listFd = modelBO.getListFolderPermission(session.getUserId());
+				
+				//trường hợp một lần đầu lấy LIST
+				if(path.equals("/")) {
+					List<FolderPath> listFd = modelBO.getListFolderPermission(session.getUserId());
+					//thêm vào cache
+					for(FolderPath fp : listFd) {
+						session.getCacheFolder().add(fp.getVirtualPath(), fp);
+					}
+					//gọi HandleData để xử lý chuyển đổi dữ liệu và gửi đi
+					t = dataHandle.HandleSendFolderData(listFd, dataOut);
+				}
 	        } else {
 //	            path = model.resolvePath(argument); // tự viết thêm hàm để ghép tương đối/tuyệt đối
 	        }
@@ -205,7 +256,12 @@ public class CommandHandle {
 	        dataSocket.close();
 	        dataConnect.close();
 	        dataConnect.resetMode();
-	        ccch.send("226 Transfer complete.");
+	        if (t == true) {
+		        ccch.send("226 Transfer complete.");
+	        }
+	        else {
+				ccch.send("426 Connection closed; transfer aborted.");
+	        }
 		} catch (IOException e) {
 			ccch.send("425 Can't open data connection.");
 	        e.printStackTrace();

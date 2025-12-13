@@ -1,11 +1,12 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Model.Account.AccountBO;
+import Model.Bean.FolderPath;
 import Model.File.FileBO;
 import Model.Permission.PermissionBO;
-import Utils.FolderInfo;
 
 public class ModelBO {
 	private AccountBO accBO = new AccountBO();
@@ -20,10 +21,17 @@ public class ModelBO {
 		return accBO.checkLogin(username, password);
 	}
 
-	public ArrayList<FolderInfo> getListFolderPermission(int userId) {
+	public List<FolderPath> getListFolderPermission(int usid) {
 		//dùng id truy xuất trong bảng userPermission lấy danh sách fid
-		int[] liFolderID = permsBO.getListIdByUsid();
-		return null;
+		List<Integer> listFid = permsBO.getListFidByUsid(usid);
+		
+		//dùng list fid để lấy danh sách thư mục đầy đủ
+		List<FolderPath> listFp = new ArrayList<FolderPath>();
+		for(Integer i : listFid) {
+			FolderPath fp = fileBO.getFolderPathByFid(i);
+			listFp.add(fp);
+		}
+		return listFp;
 	}
 
 }

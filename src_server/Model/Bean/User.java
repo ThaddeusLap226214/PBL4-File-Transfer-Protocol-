@@ -5,6 +5,9 @@ public class User {
 	private String username;
 	private String password;
 	private int grid;
+	public void setGrid(int grid) {
+		this.grid = grid;
+	}
 	public int getUsid() {
 		return usid;
 	}

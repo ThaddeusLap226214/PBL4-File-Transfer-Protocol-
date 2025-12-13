@@ -1,9 +1,5 @@
-package FTP_Protocol;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import Utils.FolderInfo;
+package FTPBean;
+import FTP_Protocol.DataConnectionHandle;
 
 public class Session {
 	private int sessionID;		//mã phiên
@@ -11,7 +7,7 @@ public class Session {
 	private boolean loggedIn;	//Trạng thái login
 	private int userId;			//Id trong csdl của user
 	private String currentDirectory;	//thư mục hiện tại
-	private Map<String, FolderInfo> cacheFolder = new HashMap<String, FolderInfo>();
+	private CacheFolder cacheFolder = new CacheFolder();
 	private DataConnectionHandle dataConnect;
 	
 	public DataConnectionHandle getDataConnect() {
@@ -35,7 +31,7 @@ public class Session {
 	public void setCurrentDirectory(String currentDirectory) {
 		this.currentDirectory = currentDirectory;
 	}
-	public Map<String, FolderInfo> getCacheFolder() {
+	public CacheFolder getCacheFolder() {
 		return cacheFolder;
 	}
 	public int getSessionID() {

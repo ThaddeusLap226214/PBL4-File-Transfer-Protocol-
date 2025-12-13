@@ -1,6 +1,6 @@
 package Model.Bean;
 
-public class Group {
+public class Groups {
 	private int grid;
 	private String groupName;
 	public String getGroupName() {
@@ -12,12 +12,12 @@ public class Group {
 	public int getGrid() {
 		return grid;
 	}
-	public Group(int grid, String groupName) {
+	public Groups(int grid, String groupName) {
 		super();
 		this.grid = grid;
 		this.groupName = groupName;
 	}
-	public Group() {
+	public Groups() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
