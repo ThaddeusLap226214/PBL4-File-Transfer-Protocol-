@@ -1,6 +1,8 @@
 package FTPSystemData;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.util.ArrayList;
@@ -81,4 +83,71 @@ public class SystemData {
         // Chuyển List<String> sang mảng String[]
         return realPaths.toArray(new String[0]);
     }
+    
+    public static boolean existFile(String nativePath) {
+    		Path path = Paths.get(nativePath);
+		return Files.isRegularFile(path);
+	}
+
+	public InputStream getFileInputStream(String nativePath) throws IOException{
+		Path path = Paths.get(nativePath);
+		if(!Files.isRegularFile(path)) {
+			return null;
+		}
+		return Files.newInputStream(path, StandardOpenOption.READ); //đọc file không ghi
+	}
+	
+	public OutputStream getFileOutputStream(String nativePath) throws IOException{
+		Path path = Paths.get(nativePath);
+		return Files.newOutputStream(path, 
+				StandardOpenOption.CREATE,
+				StandardOpenOption.TRUNCATE_EXISTING,
+				StandardOpenOption.WRITE); //ghi mới hoặc ghi đè
+	}
+
+	public static String CheckExistFile(String nativePath) {
+		Path path = Paths.get(nativePath);
+		if (!Files.exists(path)) {
+	        return nativePath; // chưa tồn tại → dùng luôn
+	    }
+		
+		String fileName = path.getFileName().toString();
+	    Path parent = path.getParent();
+	    int dotIndex = fileName.lastIndexOf('.');
+	    String name = (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
+	    String ext = (dotIndex == -1) ? "" : fileName.substring(dotIndex);
+
+	    int count = 1;
+	    Path newPath;
+	    do {
+	        newPath = parent.resolve(name + " (" + count + ")" + ext);
+	        count++;
+	    } while (Files.exists(newPath));
+
+	    return newPath.toString();
+	}
+
+	public boolean deleteFile(String nativePath){
+		try {
+	        Path path = Paths.get(nativePath);
+	        return Files.deleteIfExists(path);
+	    } catch (IOException e) {
+	        return false;
+	    }
+	}
+
+	public static boolean exists(String nativePath) {
+		Path path = Paths.get(nativePath);
+		return Files.exists(path);
+	}
+
+	public void createDirectory(String nativePath) throws IOException {
+		Path path = Paths.get(nativePath);
+		Files.createDirectory(path);
+	}
+
+	public void deleteDirectory(String nativePath) throws IOException {
+		Path path = Paths.get(nativePath);
+	    Files.delete(path); // chỉ xóa được nếu rỗng
+	}
 }

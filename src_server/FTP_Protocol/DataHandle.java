@@ -1,5 +1,7 @@
 package FTP_Protocol;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -107,5 +109,46 @@ public class DataHandle {
 		}
 		//Trả về
 		return listFp;
+	}
+	public boolean HandleSendFileData(String nativePath, OutputStream dataOut) {
+		try(InputStream fileIn = SD.getFileInputStream(nativePath)){
+			if(fileIn == null) return false;
+			byte[] buffer = new byte[1024*8]; // buffer 4KB
+	        int bytesRead;
+	        while ((bytesRead = fileIn.read(buffer)) != -1) {
+	            dataOut.write(buffer, 0, bytesRead);
+	        }
+	        dataOut.flush();
+	        return true;
+		} catch(IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	public boolean HandleReceiveFileData(String nativePath, InputStream dataIn) {
+		try(OutputStream fileOut = SD.getFileOutputStream(nativePath)){
+			if (fileOut == null) return false;
+
+	        byte[] buffer = new byte[1024*8]; // 8KB buffer
+	        int bytesRead;
+	        while ((bytesRead = dataIn.read(buffer)) != -1) {
+	            fileOut.write(buffer, 0, bytesRead);
+	        }
+	        fileOut.flush();
+	        return true;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+		
+	}
+	public boolean deleteFile(String nativePath){
+		return SD.deleteFile(nativePath);
+	}
+	public void createDirectory(String nativePath) throws IOException {
+		SD.createDirectory(nativePath);
+	}
+	public void deleteDirectory(String nativePath) throws IOException {
+		SD.deleteDirectory(nativePath);
 	}
 }
