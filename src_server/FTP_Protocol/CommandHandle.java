@@ -126,6 +126,7 @@ public class CommandHandle {
 				session.getCacheFolder().add(fp.getVirtualPath(), fp);
 			}
 			ccch.send("230 User logged in, proceed.");
+			ccch.sendAppend(argument);
 		} else {
 			session.setUsername(null);
 			ccch.send("504 Wrong password, log in again from USER command.");

@@ -5,12 +5,14 @@ import java.net.UnknownHostException;
 
 import AdminController.AdminController;
 import FTPController.FTPController;
+import FTP_Protocol.ServerSoc;
 import Model.ModelBO;
 import View.*;
 
 public class FTPrun {
-	private ViewAdminFTPServer viewConnect = new ViewAdminFTPServer();
+	//private ViewAdminFTPServer viewConnect = new ViewAdminFTPServer();
 	private ViewAdminConfigure viewConfig = new ViewAdminConfigure();
+	private ViewAdminFTPServer viewConnect = new ViewAdminFTPServer(viewConfig);
 	private FTPController controllerFTP;
 	private AdminController controllerAdmin;
 	

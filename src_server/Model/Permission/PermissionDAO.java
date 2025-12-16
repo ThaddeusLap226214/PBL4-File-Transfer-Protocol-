@@ -15,7 +15,7 @@ public class PermissionDAO extends BaseDAO {
         try {
             p.setUsid(rs.getInt("usid"));
             p.setFid(rs.getInt("fid"));
-            p.setAccessMode(rs.getString("accessMode"));
+            p.setAccessMode(rs.getString("accessmode"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 import FTPBean.Session;
 import FTPController.FTPControllerEventListener;
@@ -55,17 +56,33 @@ public class ControlConnectionClientHandle extends Thread{
 		String command = null;
 		try {
 			command = reader.readLine();
+			//test
+			System.out.println(command);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return command;
 	}
 	
-	public void send(String request) {
+	public void send(String response) {
+		try {
+			//test
+			System.out.println(response);
+			writer.write(response + "\r\n");
+			writer.flush();
+			cel.onServerResponse(LocalDateTime.now(), session.getSessionID(), this.soc.getInetAddress(), response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendAppend(String request) {
 		try {
 			writer.write(request + "\r\n");
 			writer.flush();
-			cel.onServerRequest(session.getSessionID(), session.getUsername(), "127.0.0.1",request);
+			cel.onServerResponse(LocalDateTime.now(), session.getSessionID(), this.soc.getInetAddress(), request);
+			cel.onClientLoginSuccess(LocalDateTime.now(), session.getSessionID(), this.soc.getInetAddress(), session.getUsername());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,7 +95,7 @@ public class ControlConnectionClientHandle extends Thread{
 		while(true) {
 			String command = receive();
 			if(command != null) {
-				cel.onClientCommand(session.getSessionID(), session.getUsername() , "127.0.0.1",command);
+				cel.onClientCommand(LocalDateTime.now(), session.getSessionID(), this.soc.getInetAddress(), command);
 				ch.handle(command, this, this.session);
 			}
 			else {

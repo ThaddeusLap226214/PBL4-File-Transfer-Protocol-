@@ -14,8 +14,8 @@ public class FileDAO extends BaseDAO {
         FolderPath f = new FolderPath();
         try {
             f.setFid(rs.getInt("fid"));
-            f.setVirtualPath(rs.getString("virtualPath"));
-            f.setNativePath(rs.getString("nativePath"));
+            f.setVirtualPath(rs.getString("virtualpath"));
+            f.setNativePath(rs.getString("nativepath"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -27,7 +27,7 @@ public class FileDAO extends BaseDAO {
         FolderPath f = new FolderPath();
         try {
             f.setFid(rs.getInt("fid"));
-            f.setVirtualPath(rs.getString("virtualPath"));
+            f.setVirtualPath(rs.getString("virtualpath"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class FileDAO extends BaseDAO {
     }
 
     public boolean insertFolder(String virtualPath, String nativePath) {
-        String sql = "INSERT INTO folderpath(virtualPath, nativePath) VALUES(?, ?)";
+        String sql = "INSERT INTO folderpath(virtualpath, nativepath) VALUES(?, ?)";
         return executeUpdate(sql, virtualPath, nativePath);
     }
 }

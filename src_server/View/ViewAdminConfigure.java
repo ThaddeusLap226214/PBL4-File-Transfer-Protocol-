@@ -1,5 +1,7 @@
 package View;
 
-public class ViewAdminConfigure {
+import javax.swing.JFrame;
+
+public class ViewAdminConfigure extends JFrame{
 
 }
