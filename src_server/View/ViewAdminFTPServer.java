@@ -9,7 +9,7 @@ import java.awt.*;
 public class ViewAdminFTPServer extends JFrame {
 
     private FTPController controller;
-    private ViewAdminConfigure viewConfig; // <-- lấy từ FTPrun
+    private ViewAdminConfigure viewConfig;
 
     private JTable logTable;
     private JTable sessionTable;
@@ -19,12 +19,10 @@ public class ViewAdminFTPServer extends JFrame {
 
     private JLabel statusBar;
 
-    // ---------------------------------------------------------
     // CONSTRUCTOR - NHẬN viewConfig TỪ FTPrun
-    // ---------------------------------------------------------
     public ViewAdminFTPServer(ViewAdminConfigure viewConfig) {
 
-        this.viewConfig = viewConfig; // <-- dùng đúng cửa sổ config được tạo sẵn
+        this.viewConfig = viewConfig;
 
         setTitle("ServerFTP - Administration Interface");
         setMinimumSize(new Dimension(1200, 700));
@@ -32,10 +30,7 @@ public class ViewAdminFTPServer extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
-        // ----------------------------------------
         // MENU BAR
-        // ----------------------------------------
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menuServer = new JMenu("Server");
@@ -69,37 +64,25 @@ public class ViewAdminFTPServer extends JFrame {
         menuBar.add(menuHelp);
 
         setJMenuBar(menuBar);
-
-        // ----------------------------------------
         // LOG TABLE
-        // ----------------------------------------
         String[] logColumns = { "Date/Time", "Info", "Type", "Message" };
         logModel = new DefaultTableModel(logColumns, 0);
         logTable = new JTable(logModel);
 
         JScrollPane scrollLog = new JScrollPane(logTable);
-
-        // ----------------------------------------
         // SESSION TABLE
-        // ----------------------------------------
         String[] sessionColumns = { "Date/Time", "Session", "Protocol", "Host", "User", "Transfer" };
         sessionModel = new DefaultTableModel(sessionColumns, 0);
         sessionTable = new JTable(sessionModel);
 
         JScrollPane scrollSession = new JScrollPane(sessionTable);
-
-        // ----------------------------------------
         // SPLIT PANE
-        // ----------------------------------------
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollLog, scrollSession);
         splitPane.setResizeWeight(0.70);
         splitPane.setDividerLocation(350);
 
         add(splitPane, BorderLayout.CENTER);
-
-        // ----------------------------------------
         // STATUS BAR
-        // ----------------------------------------
         statusBar = new JLabel("Server ready");
         statusBar.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         add(statusBar, BorderLayout.SOUTH);
@@ -107,16 +90,12 @@ public class ViewAdminFTPServer extends JFrame {
         setVisible(true);
     }
 
-    // ---------------------------------------------------
     // GÁN CONTROLLER
-    // ---------------------------------------------------
     public void setController(FTPController controller) {
         this.controller = controller;
     }
 
-    // ---------------------------------------------------
     // LOG
-    // ---------------------------------------------------
     public void appendLog(int session, String username, String clientAddress, String msg) {
         logModel.addRow(new Object[] {
                 java.time.LocalDateTime.now().toString(),
@@ -126,9 +105,7 @@ public class ViewAdminFTPServer extends JFrame {
         });
     }
 
-    // ---------------------------------------------------
     // SESSION
-    // ---------------------------------------------------
     public void appendSession(int sessionID, String protocol, String host, String user, String transfer) {
         sessionModel.addRow(new Object[] {
                 java.time.LocalDateTime.now().toString(),

@@ -17,6 +17,7 @@ public class FTPrun {
 	public FTPrun() {
 		controllerFTP = new FTPController(viewConnect);
 		controllerAdmin = new AdminController(viewConfig);
+		viewConfig.initUserButtonEvents(controllerAdmin);
 	}
 
 	public static void main(String[] args) {

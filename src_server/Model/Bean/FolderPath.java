@@ -5,6 +5,8 @@ public class FolderPath {
 	private String virtualPath;
 	private String nativePath;
 
+	private String accessMode; // RWD, RO, DIS
+
 	public FolderPath() {
 	}
 
@@ -36,5 +38,14 @@ public class FolderPath {
 
 	public void setNativePath(String nativePath) {
 		this.nativePath = nativePath;
+	}
+
+	// ===== Thêm getter / setter cho accessMode =====
+	public String getAccessMode() {
+		return accessMode;
+	}
+
+	public void setAccessMode(String accessMode) {
+		this.accessMode = accessMode;
 	}
 }

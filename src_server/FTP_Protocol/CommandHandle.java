@@ -60,7 +60,7 @@ public class CommandHandle {
 		// ccch.send("331 Password required for " + username);
 
 		// Kiểm tra user
-		User user = modelBO.findUser(username); // nhận về User thay vì boolean
+		Boolean user = modelBO.findUser(username); // nhận về User thay vì boolean
 		if (user != null) {
 			ccch.send("331 Password required for " + username);
 		} else {
