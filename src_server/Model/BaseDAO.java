@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -43,6 +44,24 @@ public class BaseDAO {
 			return false;
 		}
 	}
+	
+	// INSERT + lấy ID tự sinh
+		public int executeInsertGetId(String sql, Object... params) {
+			try (Connection conn = DBConnection.getConnection();
+					PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+				setParameters(pstmt, params);
+				pstmt.executeUpdate();
+
+				try (ResultSet rs = pstmt.getGeneratedKeys()) {
+					if (rs.next())
+						return rs.getInt(1);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return -1;
+		}
 	
 	//Gán tham số
 	private void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {

@@ -1,33 +1,47 @@
 package Model.Account;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccountBO {
+	private AccountDAO accDAO = new AccountDAO();
 
 	public boolean findUser(String username) {
-		//truy xuất dữ liệu nếu có username.
-		
-		//Dữ liệu giả
-		ArrayList<String> usernames = new ArrayList<String>();
-		usernames.add("LapDaiKa");
-		usernames.add("Lap321");
-		usernames.add("DanEm1");
-		for (String user : usernames) {
-			if(user.equals(username))
-				return true;
-		}
-		return false;
+		return accDAO.findUser(username);
 	}
 
 	public int checkLogin(String username, String password) {
-		//truy xuất dữ liệu nếu có username.
-		
-		//Dữ liệu giả
-		if((username.equals("LapDaiKa") && password.equals("12345"))
-				||(username.equals("Lap321") && password.equals("123456"))){
-			return 2; //id giả = 4
-		}
-		return -1; //không tìm thấy
+		return accDAO.checkLogin(username, password);
 	}
 
+	public List<String> getAllUsernames() {
+		return accDAO.getAllUsernames();
+	}
+
+	public int getUsidByUsername(String username) {
+		if (username == null || username.trim().isEmpty())
+            return -1;
+        return accDAO.getUsidByUsername(username.trim());
+	}
+
+	public boolean deleteUser(String username) {
+		return accDAO.deleteUser(username);
+	}
+
+	public boolean updateUsername(String oldName, String newName) {
+		if (findUser(newName))
+			return false;
+	    return accDAO.updateUsername(oldName, newName);
+	}
+
+	public boolean insertUser(String username, String password) {
+		if (findUser(username))
+            return false;
+        return accDAO.insertUser(username, password);
+	}
+
+	public boolean updateUserPassword(String username, String password) {
+		return accDAO.updateUserPassword(username, password);
+	}
+	
 }

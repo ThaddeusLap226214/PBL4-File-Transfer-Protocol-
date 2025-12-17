@@ -1,4 +1,4 @@
-package FTPBean;
+package FTPEntity;
 
 import java.nio.file.attribute.FileTime;
 

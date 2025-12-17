@@ -64,4 +64,37 @@ public class PermissionDAO extends BaseDAO {
 		String sql = "SELECT fid FROM userpermission WHERE usid = ?";
 		return executeQuery(sql, this::mapListFid, usid);
 	}
+
+	public boolean deleteUserPermission(int usid, Integer fid) {
+		String sql = "DELETE FROM userpermission WHERE usid = ? AND fid = ?";
+        boolean deleted = executeUpdate(sql, usid, fid);
+//        System.out.println("Deleted existing permission: usid=" + usid + ", fid=" + fid + " -> " + deleted);
+        return deleted;
+	}
+
+	public boolean insertUserPermission(int usid, int fid, String accessMode) {
+		String sql = "INSERT INTO userpermission (usid, fid, accessmode) VALUES (?, ?, ?)";
+        boolean inserted = executeUpdate(sql, usid, fid, accessMode);
+//        if (inserted) {
+//            System.out.println("Inserted permission: usid=" + usid + ", fid=" + fid + ", access=" + accessMode);
+//        } else {
+//            System.out.println("Failed to insert permission: usid=" + usid + ", fid=" + fid);
+//        }
+        return inserted;
+	}
+
+	public String getAccessMode(int usid, int fid) {
+		String sql = "SELECT accessmode FROM userpermission WHERE usid = ? AND fid = ?";
+
+    List<String> list = executeQuery(sql, rs -> {
+        try {
+            return rs.getString("accessmode");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }, usid, fid);
+
+    return list.isEmpty() ? null : list.get(0);
+	}
 }

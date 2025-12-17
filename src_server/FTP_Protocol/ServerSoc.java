@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import FTPController.FTPControllerEventListener;
+import FTPControl.FTPControlEventListener;
 
 public class ServerSoc implements Runnable{
 	private CommandHandle ch = new CommandHandle();
 	private ServerSocket server;
-	private FTPControllerEventListener controller;
+	private FTPControlEventListener controller;
 	
-	public ServerSoc(int port, FTPControllerEventListener controller) {
+	public ServerSoc(int port, FTPControlEventListener controller) {
 		this.controller = controller;
 		try {
 			server = new ServerSocket(port);

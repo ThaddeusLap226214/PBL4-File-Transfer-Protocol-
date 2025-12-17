@@ -1,8 +1,9 @@
 package View;
-//
-import FTPController.FTPController;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import FTPControl.FTPControl;
+
 import java.awt.*;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ViewAdminFTPServer extends JFrame {
 
-    private FTPController controller;
+    private FTPControl controller;
     private ViewAdminConfigure viewConfig; // <-- lấy từ FTPrun
 
     private JTable logTable;
@@ -126,7 +127,7 @@ public class ViewAdminFTPServer extends JFrame {
     // ---------------------------------------------------
     // GÁN CONTROLLER
     // ---------------------------------------------------
-    public void setController(FTPController controller) {
+    public void setController(FTPControl controller) {
         this.controller = controller;
     }
 

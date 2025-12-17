@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import FTPBean.FileInfo;
+import FTPEntity.FileInfo;
 import FTPSystemData.SystemData;
 import Model.Bean.FolderPath;
 

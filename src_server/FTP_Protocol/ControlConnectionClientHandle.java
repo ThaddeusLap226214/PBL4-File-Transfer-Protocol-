@@ -9,11 +9,11 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-import FTPBean.Session;
-import FTPController.FTPControllerEventListener;
+import FTPControl.FTPControlEventListener;
+import FTPEntity.Session;
 
 public class ControlConnectionClientHandle extends Thread{
-	private FTPControllerEventListener cel;
+	private FTPControlEventListener cel;
 	private Socket soc;
 	private BufferedReader reader;
 	private BufferedWriter writer;
@@ -21,7 +21,7 @@ public class ControlConnectionClientHandle extends Thread{
 	private Session session;
 	
 	//hàm dựng với session
-	public ControlConnectionClientHandle(Socket soc, CommandHandle ch, FTPControllerEventListener cel, int session) {
+	public ControlConnectionClientHandle(Socket soc, CommandHandle ch, FTPControlEventListener cel, int session) {
 		this.cel = cel;
 		this.soc = soc;
 		this.ch = ch;
@@ -32,10 +32,11 @@ public class ControlConnectionClientHandle extends Thread{
 	
 	public void close() {
 		try {
-			this.soc.close();
+			if (soc != null && !soc.isClosed()) {
+	            soc.close();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -55,11 +56,17 @@ public class ControlConnectionClientHandle extends Thread{
 	private String receive() {
 		String command = null;
 		try {
+			if(soc.isClosed() || !soc.isConnected()) {
+				return null;
+			}
 			command = reader.readLine();
+			if (command == null) {
+				return null;
+			}
 			//test
 			System.out.println(command);
 		} catch (IOException e) {
-			e.printStackTrace();
+			return null;
 		}
 		return command;
 	}
@@ -99,8 +106,10 @@ public class ControlConnectionClientHandle extends Thread{
 				ch.handle(command, this, this.session);
 			}
 			else {
-				
+				break;
 			}
 		}
+		close();
 	}
+	
 }

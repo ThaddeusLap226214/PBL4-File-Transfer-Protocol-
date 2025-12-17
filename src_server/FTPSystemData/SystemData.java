@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import FTPBean.FileInfo;
+import FTPEntity.FileInfo;
 
 public class SystemData {
 	

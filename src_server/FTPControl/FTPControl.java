@@ -1,4 +1,4 @@
-package FTPController;
+package FTPControl;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import FTP_Protocol.ServerSoc;
 import View.*;
 
-public class FTPController implements FTPControllerEventListener{
+public class FTPControl implements FTPControlEventListener{
 	private ViewAdminFTPServer viewConnect;
 //	private ServerSoc server;
 	
@@ -18,12 +18,17 @@ public class FTPController implements FTPControllerEventListener{
 //		this.server = server;
 //	}
 	
-	public FTPController(ViewAdminFTPServer viewConnect) {
+	public FTPControl(ViewAdminFTPServer viewConnect) {
 		setViewConnect(viewConnect);
 //		setServerFTP(server);
 		//cổng 21
 		ServerSoc server = new ServerSoc(21, this);
 		new Thread(server).start();
+		try {
+			viewConnect.appendLog(LocalDateTime.now(), "FTP Server", "Notification","Address: " + InetAddress.getLocalHost().getHostAddress().toString() + ":21");
+		} catch (UnknownHostException e) {
+			viewConnect.appendLog(LocalDateTime.now(), "FTP Server", "Notification","Address: 127.0.0.1:21");
+		}
 	}
 		
 	@Override

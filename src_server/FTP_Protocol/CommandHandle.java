@@ -12,13 +12,13 @@ import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 
-import FTPBean.Session;
+import FTPEntity.Session;
 import FTPSystemData.SystemData;
-import Model.ModelBO;
+import Model.LogicCoordinator;
 import Model.Bean.FolderPath;
 
 public class CommandHandle {
-	private ModelBO modelBO = new ModelBO();
+	private LogicCoordinator modelBO = new LogicCoordinator();
 	private DataHandle dataHandle = new DataHandle();
 
 	public void handle(String cmd, ControlConnectionClientHandle ccch, Session session) {

@@ -1,4 +1,4 @@
-package FTPBean;
+package FTPEntity;
 import FTP_Protocol.DataConnectionHandle;
 
 public class Session {

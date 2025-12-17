@@ -7,5 +7,11 @@ public class FileBO {
 	public FolderPath getFolderPathByFid(Integer i) {
 		return fileDAO.getByFid(i);
 	}
+	public FolderPath insertIfNotExists(String virtualPath, String nativePath) {
+        return fileDAO.insertIfNotExists(virtualPath, nativePath);
+	}
+	public FolderPath getByVirtualAndNativePath(String vpath, String npath) {
+        return fileDAO.getByVirtualAndNativePath(vpath, npath);
+	}
 
 }
