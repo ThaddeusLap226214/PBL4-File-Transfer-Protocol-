@@ -9,7 +9,7 @@ import java.util.Map;
 
 import Model.Bean.FolderPath;
 
-public class CacheFolder {
+public class RootFolders {
 	private Map<String, FolderPath> cache = new HashMap<String, FolderPath>();
 	
 	public void add(String key, FolderPath fp) {

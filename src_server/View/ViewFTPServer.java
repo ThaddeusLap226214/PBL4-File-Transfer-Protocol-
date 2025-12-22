@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ViewAdminFTPServer extends JFrame {
+public class ViewFTPServer extends JFrame {
 
     private FTPControl controller;
     private ViewAdminConfigure viewConfig; // <-- lấy từ FTPrun
@@ -25,12 +25,12 @@ public class ViewAdminFTPServer extends JFrame {
     // ---------------------------------------------------------
     // CONSTRUCTOR - NHẬN viewConfig TỪ FTPrun
     // ---------------------------------------------------------
-    public ViewAdminFTPServer(ViewAdminConfigure viewConfig) {
+    public ViewFTPServer(ViewAdminConfigure viewConfig) {
 
         this.viewConfig = viewConfig; // <-- dùng đúng cửa sổ config được tạo sẵn
 
         setTitle("ServerFTP - Administration Interface");
-        setMinimumSize(new Dimension(1200, 700));
+        setMinimumSize(new Dimension(600, 350));
         setSize(1400, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

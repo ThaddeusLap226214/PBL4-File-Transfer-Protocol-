@@ -538,7 +538,8 @@ public class CommandHandle {
 	
 	private void handleQUIT(String argument, ControlConnectionClientHandle ccch, Session session) {
 //		modelBO.handleQUIT();
-		ccch.close();
+//		ccch.close();
+		ccch.shutdown();
 	}
 
 	private void handleCommandNotImplm(String argument, ControlConnectionClientHandle ccch, Session session) {

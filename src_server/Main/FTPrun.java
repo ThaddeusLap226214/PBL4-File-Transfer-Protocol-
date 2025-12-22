@@ -12,7 +12,7 @@ import View.*;
 public class FTPrun {
 	//private ViewAdminFTPServer viewConnect = new ViewAdminFTPServer();
 	private ViewAdminConfigure viewConfig = new ViewAdminConfigure();
-	private ViewAdminFTPServer viewConnect = new ViewAdminFTPServer(viewConfig);
+	private ViewFTPServer viewConnect = new ViewFTPServer(viewConfig);
 	private FTPControl controllerFTP;
 	private AdminController controllerAdmin;
 	

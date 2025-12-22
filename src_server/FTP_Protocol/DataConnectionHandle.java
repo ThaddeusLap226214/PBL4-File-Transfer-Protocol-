@@ -3,6 +3,7 @@ package FTP_Protocol;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class DataConnectionHandle {
 	private boolean modeSelected = false;
@@ -22,7 +23,8 @@ public class DataConnectionHandle {
 	
 	public int enterPassiveMode() throws IOException{
 		close();
-		passiveServer = new ServerSocket(0);
+		Random rd = new Random();
+		passiveServer = new ServerSocket(50000 + rd.nextInt(1000));
 		passiveMode = true;
 		modeSelected = true;
 		return passiveServer.getLocalPort();

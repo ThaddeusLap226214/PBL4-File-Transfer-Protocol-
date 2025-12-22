@@ -8,17 +8,17 @@ import FTP_Protocol.ServerSoc;
 import View.*;
 
 public class FTPControl implements FTPControlEventListener{
-	private ViewAdminFTPServer viewConnect;
+	private ViewFTPServer viewConnect;
 //	private ServerSoc server;
 	
-	public void setViewConnect(ViewAdminFTPServer view) {
+	public void setViewConnect(ViewFTPServer view) {
 		this.viewConnect = view;
 	}
 //	public void setServerFTP(ServerSoc server) {
 //		this.server = server;
 //	}
 	
-	public FTPControl(ViewAdminFTPServer viewConnect) {
+	public FTPControl(ViewFTPServer viewConnect) {
 		setViewConnect(viewConnect);
 //		setServerFTP(server);
 		//cổng 21

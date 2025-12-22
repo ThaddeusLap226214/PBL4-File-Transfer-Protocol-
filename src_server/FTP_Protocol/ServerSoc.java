@@ -1,6 +1,7 @@
 package FTP_Protocol;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,7 +15,7 @@ public class ServerSoc implements Runnable{
 	public ServerSoc(int port, FTPControlEventListener controller) {
 		this.controller = controller;
 		try {
-			server = new ServerSocket(port);
+			server = new ServerSocket(21, 50, InetAddress.getByName("0.0.0.0"));
 		} catch (IOException e) {
 			System.out.println("Server không mở cổng được " +e.getMessage() );
 		}

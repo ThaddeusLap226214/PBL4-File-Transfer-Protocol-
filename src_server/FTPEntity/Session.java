@@ -7,7 +7,7 @@ public class Session {
 	private boolean loggedIn;	//Trạng thái login
 	private int userId;			//Id trong csdl của user
 	private String currentDirectory;	//thư mục hiện tại
-	private CacheFolder cacheFolder = new CacheFolder();
+	private RootFolders cacheFolder = new RootFolders();
 	private DataConnectionHandle dataConnect;
 	
 	public DataConnectionHandle getDataConnect() {
@@ -31,7 +31,7 @@ public class Session {
 	public void setCurrentDirectory(String currentDirectory) {
 		this.currentDirectory = currentDirectory;
 	}
-	public CacheFolder getCacheFolder() {
+	public RootFolders getCacheFolder() {
 		return cacheFolder;
 	}
 	public int getSessionID() {

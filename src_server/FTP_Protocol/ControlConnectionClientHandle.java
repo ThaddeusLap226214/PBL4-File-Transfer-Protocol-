@@ -31,13 +31,25 @@ public class ControlConnectionClientHandle extends Thread{
 	}
 	
 	public void close() {
+//		try {
+//			if (soc != null && !soc.isClosed()) {
+//	            soc.close();
+//			}
+//		} catch (IOException e) {
+//			
+//		}
 		try {
-			if (soc != null && !soc.isClosed()) {
-	            soc.close();
-			}
-		} catch (IOException e) {
-			
-		}
+	        if (reader != null) reader.close();
+	        if (writer != null) writer.close();
+	        if (soc != null && !soc.isClosed()) soc.close();
+	    } catch (IOException e) {
+	        // log nếu cần
+	    }
+	}
+	
+	public void shutdown() {
+	    interrupt();
+	    close();
 	}
 	
 	
@@ -55,6 +67,9 @@ public class ControlConnectionClientHandle extends Thread{
 	
 	private String receive() {
 		String command = null;
+		if (Thread.currentThread().isInterrupted()) {
+		    return null;
+		}
 		try {
 			if(soc.isClosed() || !soc.isConnected()) {
 				return null;
@@ -99,7 +114,7 @@ public class ControlConnectionClientHandle extends Thread{
 	@Override
 	public void run() {
 //		ch.setControlConnectionHandle(this);
-		while(true) {
+		while(!isInterrupted()) {
 			String command = receive();
 			if(command != null) {
 				cel.onClientCommand(LocalDateTime.now(), session.getSessionID(), this.soc.getInetAddress(), command);
